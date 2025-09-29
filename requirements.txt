@@ -1,0 +1,6 @@
+ChiantiPy
+numpy
+scipy
+matplotlib
+pandas
+ipyparallel
