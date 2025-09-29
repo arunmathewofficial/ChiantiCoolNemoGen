@@ -114,6 +114,9 @@ class chianti:
         if 'line' in self.keys:
             thisIon = ch.ion(ionStr=self.ion_name, temperature=self.temperature,
                              eDensity=self.eDensity, abundance='unity')
+            if not hasattr(thisIon, 'Nlvls'):
+                return self.default_cooing_rate_table()
+
 
         # set rate tables to zero
         total_rate = np.zeros_like(self.temperature)
@@ -199,6 +202,36 @@ class chianti:
         return radiative_loss
 
     # end of cooling table function ###################################
+
+    # default cooling rate table ######################################
+    def default_cooing_rate_table(self):
+        temperature = self.temperature
+        ne = self.eDensity
+        ff_rate = np.full_like(temperature, 1e-50)
+        fb_rate = np.full_like(temperature, 1e-50)
+        bb_rate = np.full_like(temperature, 1e-50)
+        twophoton_rate = np.full_like(temperature, 1e-50)
+        total_rate = np.full_like(temperature, 1e-50)
+
+        ion_info = util.convertName(self.ion_name)
+        Z = ion_info['Z']
+        ionstage = ion_info['Ion']
+        dielectronic = ion_info['Dielectronic']
+
+        radiative_loss = {'temperature': temperature, 'ne': ne,
+                          'ff-rate': ff_rate, 'fb-rate': fb_rate,
+                          'bb-rate': bb_rate,
+                          'twophoton-rate': twophoton_rate,
+                          'total-rate': total_rate,
+                          'ion_string': self.ion_string_name,
+                          'Z': Z, 'Ion_stage': ionstage,
+                          'Dielectronic': dielectronic,
+                          'keys': self.keys
+                          }
+
+        del ff_rate, fb_rate, bb_rate, twophoton_rate, total_rate
+        return radiative_loss
+    # end of default cooling rate table ###############################
 
     # plot cooling table ##############################################
     def plot_cooling_rate(self, cooling_rate, plot_dir):
