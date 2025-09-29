@@ -2,44 +2,39 @@
 
 # Other packages
 import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
-import warnings
 import sys
 import argparse
 import os
 from os.path import join
 from tool import print_to_file, nemo_format
-
+import time
 from Chianti import chianti
 
 print(f" Chianti NEMO Cooling Table Generator")
 
 ion_list = [
     # Hydrogen
-    #'H', 'H1+',
+    'H', 'H1+',
     # Helium
-    #'He', 'He1+', 'He2+',
+    'He', 'He1+', 'He2+',
     # Carbon
-    #'C', 'C1+', 'C2+', 'C3+', 'C4+', 'C5+', 'C6+',
+    'C', 'C1+', 'C2+', 'C3+', 'C4+', 'C5+', 'C6+',
     # Nitrogen
-    #'N', 'N1+', 'N2+', 'N3+', 'N4+', 'N5+', 'N6+', 'N7+',
+    'N', 'N1+', 'N2+', 'N3+', 'N4+', 'N5+', 'N6+', 'N7+',
     # Oxygen
-    #'O', 'O1+', 'O2+', 'O3+', 'O4+', 'O5+', 'O6+', 'O7+', 'O8+',
-    # Neon (Neutral Ne is not in Chianti database)
-    #'Ne', 'Ne1+', 'Ne2+', 'Ne3+', 'Ne4+', 'Ne5+', 'Ne6+', 'Ne7+', 'Ne8+', 'Ne9+', 'Ne10+',
-    # Silicon (Neutral Si is not in Chianti database)
-    #'Si1+', 'Si2+', 'Si3+', 'Si4+', 'Si5+', 'Si6+', 'Si7+', 'Si8+', 'Si9+', 'Si10+',
-    #'Si11+', 'Si12+', 'Si13+', 'Si14+',
+    'O', 'O1+', 'O2+', 'O3+', 'O4+', 'O5+', 'O6+', 'O7+', 'O8+',
+    # Neon
+    'Ne', 'Ne1+', 'Ne2+', 'Ne3+', 'Ne4+', 'Ne5+', 'Ne6+', 'Ne7+', 'Ne8+', 'Ne9+', 'Ne10+',
+    # Silicon
+    'Si', 'Si1+', 'Si2+', 'Si3+', 'Si4+', 'Si5+', 'Si6+', 'Si7+', 'Si8+', 'Si9+', 'Si10+',
+    'Si11+', 'Si12+', 'Si13+', 'Si14+',
     # Sulfur
-    #'S', 'S1+', 'S2+', 'S3+', 'S4+', 'S5+', 'S6+', 'S7+', 'S8+', 'S9+', 'S10+', 'S11+',
-    #'S12+', 'S13+', 'S14+', 'S15+', 'S16+',
+    'S', 'S1+', 'S2+', 'S3+', 'S4+', 'S5+', 'S6+', 'S7+', 'S8+', 'S9+', 'S10+', 'S11+',
+    'S12+', 'S13+', 'S14+', 'S15+', 'S16+',
     # Iron
-    'Fe',
-    #'Fe1+', 'Fe2+', 'Fe3+', 'Fe4+', 'Fe5+', 'Fe6+', 'Fe7+', 'Fe8+', 'Fe9+', 'Fe10+',
-    #'Fe11+', 'Fe12+', 'Fe13+', 'Fe14+', 'Fe15+', 'Fe16+', 'Fe17+', 'Fe18+', 'Fe19+',
-    #'Fe20+', 'Fe21+', 'Fe22+', 'Fe23+', 'Fe24+', 'Fe25+',
-    #'Fe26+'
+    'Fe', 'Fe1+', 'Fe2+', 'Fe3+', 'Fe4+', 'Fe5+', 'Fe6+', 'Fe7+', 'Fe8+', 'Fe9+', 'Fe10+',
+    'Fe11+', 'Fe12+', 'Fe13+', 'Fe14+', 'Fe15+', 'Fe16+', 'Fe17+', 'Fe18+', 'Fe19+',
+    'Fe20+', 'Fe21+', 'Fe22+', 'Fe23+', 'Fe24+', 'Fe25+', 'Fe26+'
 ]
 
 # Input Arguments ##########################################################
